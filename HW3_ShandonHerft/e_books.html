@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-books Page</title>
+    <style>
+        /* Basic styling for the navigation bar */
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+        }
+
+        li {
+            float: left;
+        }
+
+        li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        /* Change the link color to white when hovered */
+        li a:hover {
+            background-color: #111;
+        }
+
+        /* Dropdown content (hidden by default) */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        /* Links inside the dropdown */
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+
+        /* Change color of dropdown links on hover */
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+        /* Show the dropdown menu on hover */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Basic styling for the table of contents */
+        #toc {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin: 0;
+            float: left;
+            width: 200px;
+        }
+
+        #toc ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #toc li {
+            margin-bottom: 10px;
+        }
+
+        #toc a {
+            text-decoration: none;
+            color: #ffffff;
+        }
+
+        #toc a:hover {
+            color: none;
+        }
+
+        /* Breadcrumb trail styling */
+        .breadcrumb {
+            margin-left: 10px;
+            padding: 10px;
+        }
+
+        /* Content section */
+        .content {
+            margin-left: 220px;
+            padding: 20px;
+        }
+
+        /* Header styling */
+        header {
+            clear: both;
+            padding: 20px;
+        }
+
+        header h1 {
+            font-size: 36px;
+        }
+
+        /* Section styling */
+        section {
+            margin-bottom: 20px;
+        }
+
+        section h2 {
+            margin-top: 10px;
+        }
+
+        footer {
+            clear: both;
+            padding: 20px;
+        }
+
+        /* Calculator form styling */
+        #calculator {
+            margin-top: 20px;
+        }
+
+        #calculator label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        #calculator input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 6px;
+            margin-bottom: 16px;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        #calculator input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #calculator input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        /* Tooltip container */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Tooltip text */
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 160px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 150%;
+            left: 50%;
+            margin-left: -80px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        /* Show the tooltip text when you mouse over the tooltip container */
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* New styles for coach mark */
+        .coachmark {
+            position: relative;
+        }
+
+        .coachmark .coachmark-text {
+            position: absolute;
+            top: -50px; /* Adjust as needed */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            width: 200px;
+            text-align: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .coachmark:hover .coachmark-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Styles for expandable inputs */
+        .expandable-input {
+            position: relative;
+        }
+
+        .expandable-input .input-hint {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #f9f9f9;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+            z-index: 1;
+            display: none;
+        }
+
+        .expandable-input:hover .input-hint {
+            display: block;
+        }
+
+        /* Styles for the overflow menu */
+        .settings {
+            float: right;
+        }
+
+        .settings button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .settings button:hover {
+            background-color: #111;
+        }
+
+        /* Styles for the settings dropdown menu */
+        #settingsDropdown {
+            position: relative; /* Change position to relative */
+            display: none; /* Change display to inline-block */
+        }
+
+        #resetSettings {
+            display: none; /* Hide the reset button by default */
+            padding: 12px 16px;
+            text-decoration: none;
+            text-align: center;
+            border-top: 1px solid #ddd; /* Add border for separation */
+        }
+
+
+        #settingsDropdown a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+
+        #settingsDropdown a:hover {
+            background-color: #ddd;
+        }
+
+
+    </style>
+</head>
+<body onload="loadUserCount()">
+
+<ul>
+    <li class="dropdown">
+        <a href="#paperless" class="dropbtn">Paperless</a>
+        <div class="dropdown-content">
+            <a href="paperless_news.html">News Online</a>
+            <a href="paperless_class_material.html">Class Material Online</a>
+            <a href="paperless_office.html">Paperless Office</a>
+            <a href="e_books.html">E-books</a>
+        </div>
+    </li>
+
+    <li class="dropdown">
+        <a href="#reduce" class="dropbtn">Reduce</a>
+        <div class="dropdown-content">
+            <a href="just_in_time_inventory.html">Just in Time Inventory</a>
+            <a href="online_meetings.html">Online Meetings</a>
+            <a href="e_gifts.html">E-gifts</a>
+        </div>
+    </li>
+
+    <li class="dropdown">
+        <a href="#reuse_recycle" class="dropbtn">Reuse & Recycle</a>
+        <div class="dropdown-content">
+            <a href="ewaste_recycling.html">E-waste & Electronic Recycling</a>
+            <a href="cycle_purchasing.html">Cycle of Purchasing</a>
+            <a href="reuse_old_computers.html">Reusing Old Computers</a>
+        </div>
+    </li>
+
+    <li class="dropdown">
+        <a href="#energy" class="dropbtn">Energy</a>
+        <div class="dropdown-content">
+            <a href="wasted_energy.html">Wasted Energy</a>
+            <a href="smart_buildings.html">Smart Buildings</a>
+            <a href="computer_inefficiencies.html">Computer Inefficiencies</a>
+        </div>
+    </li>
+</ul>
+
+<header>
+    <h1>Welcome to Our E-books Page</h1>
+</header>
+
+<!-- Breadcrumb trail -->
+<div class="breadcrumb">
+    <p>Home > Paperless > E-books</p>
+</div>
+
+<!-- Table of Contents -->
+<div id="toc">
+    <h2>Table of Contents</h2>
+    <ul>
+        <li><a href="#about">About E-books</a></li>
+        <li><a href="#benefits">Benefits of E-books</a></li>
+        <li><a href="#formats">Popular E-book Formats</a></li>
+        <li><a href="#access">How to Access or Purchase E-books</a></li>
+        <li><a href="#recommended">Recommended E-books</a></li>
+    </ul>
+</div>
+
+
+
+<!-- Content section -->
+<div class="content">
+    <section>
+        <h2 id="about">About E-books</h2>
+        <p>E-books, short for electronic books, are digital versions of printed books that can be read on various electronic devices such as e-readers, tablets, smartphones, and computers. They offer convenience, portability, and accessibility, allowing readers to carry multiple books with them wherever they go.</p>
+    </section>
+
+    
+
+    <section>
+        <h2 id="benefits">Benefits of E-books</h2>
+        <p>Portability: Carry numerous books in a single device.</p>    
+        <p>Accessibility: Access books anytime, anywhere with an internet connection.</p>
+        <p>Environmentally friendly: Reduce paper usage and environmental impact.</p>
+        <p>Customization: Adjust font size, style, and background for personalized reading experience.</p>
+        <p>Searchability: Easily search for specific content within a book.</p>   
+    </section>
+
+    <section>
+        <h2 id="formats">Popular E-book Formats</h2>
+        <p>EPUB</p>
+        <p>MOBI (Kindle)</p>
+        <p>PDF</p>
+        <p>AZW</p>
+        <p>DOCX</p>
+    </section>
+
+    <section>
+        <h2 id="access">How to Access or Purchase E-books</h2>
+        <p>E-books can be accessed or purchased through various online platforms, such as:</p>
+        <p>Amazon Kindle Store</p>
+        <p>Apple Books</p>
+        <p>Google Play Books</p>
+        <p>Barnes & Noble Nook</p>
+        <p>Kobo</p>
+        <p>Simply visit these platforms through your web browser or their respective apps on your device, search for the e-book you want, and follow the instructions to purchase or download it.</p>
+    </section>
+
+    <section>
+        <h2 id="recommended">Recommended E-books</h2>
+        <p>"Green IT: Reduce Your Information System's Environmental Impact While Adding to the Bottom Line" by Toby Velte, Anthony Velte, and Robert Elsenpeter: This eBook provides practical advice on how to make your IT more environmentally friendly and efficient. It's great for understanding the basics of Green IT and its impact on the environment.</p>
+        <p>"Sustainable IT Architecture: The Progressive Way of Overhauling Information Systems with SOA" by Jean-Michel Detavernier, Philippe Vandenbulke, and Pierre Bonnet: This book focuses on creating sustainable IT architectures using Service-Oriented Architecture (SOA). It's excellent for IT professionals interested in sustainable system design.</p>
+        <p>"The Green Computing Book: Tackling Energy Efficiency at Large Scale" by Wu-chun Feng: This eBook offers an in-depth look at energy efficiency in large-scale computing systems, an important topic for those interested in data centers and large IT infrastructures.</p>
+        <p>"Green Technology Strategies: Creating an Energy-Efficient, Low-Emission Future" by Tom Worthington: This book is suitable for those looking for strategies to implement green technologies in various sectors. It provides a practical approach to reducing energy consumption and carbon emissions through technology.</p>
+        <p>"IT Governance: An International Guide to Data Security and ISO27001/ISO27002" by Alan Calder and Steve Watkins: While not exclusively about Green IT, this book covers aspects of data security and management which are integral to sustainable IT practices.</p>
+        <p>"The Green and Virtual Data Center" by Greg Schulz: This eBook covers the intersection of green computing and virtualization, discussing how virtual data centers can be both efficient and environmentally friendly.</p>
+    </section>
+
+    <!-- Secondary Information section -->
+    <section id="secondaryInfo">
+        <h2>Additonal Help</h2>
+        <div id="secondaryContent" style="display: none;">
+            <!-- Hidden content goes here -->
+            <p>Use the Toggle Calculator button to view Calculator.</p>
+        </div>
+    </section>
+
+
+    <!-- Update User Info and Increment User Visit buttons -->
+    <div class="coachmark">
+        <button onclick="showUser()" type="button">Update User Info</button>
+        <div class="coachmark-text">Click here to update your user information.</div>
+    </div>
+
+    <div class="coachmark">
+        <button onclick="incrementUser()" type="button">Increment User Visit</button>
+        <div class="coachmark-text">Click here to increment your visit count.</div>
+    </div>
+
+    <!-- User count and type display -->
+    <div>
+        <p>USER COUNT: <span id="usercount" class="coachmark">0</span></p>
+        <p>USER TYPE: <span id="usertype"></span></p>
+    </div>
+
+    <hr/>
+
+    <!-- Set user type buttons -->
+    <div>
+        <button onclick="setNaiveUser()" type="button">Set Naive User</button>
+        <button onclick="setNoviceUser()" type="button">Set Novice User</button>
+        <button onclick="setTypicalUser()" type="button">Set Typical User</button>
+        <button onclick="setAdvancedUser()" type="button">Set Advanced User</button>
+    </div>
+
+    <!-- Navigation bar -->
+    <!-- Navigation bar -->
+    <section>
+        <ul>
+            <!-- Dropdown menu items -->
+            <!-- Add a new dropdown for selecting pre-made options -->
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Select Pre-made Option</a>
+                <div class="dropdown-content">
+                    <!-- Define pre-made options -->
+                    <a href="#" onclick="selectOption('Option 1')">Option 1</a>
+                    <a href="#" onclick="selectOption('Option 2')">Option 2</a>
+                    <a href="#" onclick="selectOption('Option 3')">Option 3</a>
+                </div>
+            </li>
+            <!-- Overflow menu for settings -->
+            <li class="settings">
+                <button id="toggleSettings">Settings</button>
+                <div id="settingsDropdown" class="dropdown-content">
+                    <a href="#" id="resetSettings">Reset</a>
+                    <!-- Add more settings options as needed -->
+                </div>
+            </li>
+            <!-- Rest of the navigation bar remains the same -->
+        </ul>
+    </section>
+
+
+    
+    <section id="additionalInfo">
+        <h2>Additional Help</h2>
+        <!-- Button to toggle visibility -->
+        <button id="toggleSecondaryInfoButton">Show Secondary Information</button>
+        <!-- Hidden data for typical and advanced users -->
+        <div id="secondaryContent" style="display: none;">
+            <!-- Hidden content goes here -->
+            <p>This additional information is available only to typical and advanced users.</p>
+        </div>
+    </section>
+    
+    
+
+    <!-- Calculator section -->
+    <section id="calculator">
+        <div class="tooltip">
+            <h2>Calculate Trees Saved</h2>
+            <span class="tooltiptext">Enter the number of pages in the printed book and the number of printed copies to calculate the number of trees saved by using e-books.</span>
+        </div>
+        <!-- Overflow menu for calculator settings -->
+        <div class="settings">
+            <div id="settingsDropdown" class="dropdown-content">
+                <a href="#" id="resetSettings">Reset</a>
+                <!-- Add more settings options as needed -->
+            </div>
+        </div>
+        <button id="toggleCalculator">Toggle Calculator</button> <!-- Add a button to toggle the calculator -->
+        <form id="treeCalculator" style="display: none;"> <!-- Hide the form initially -->
+            <div class="expandable-input">
+                <label for="numPages">Number of Pages:</label>
+                <input type="number" id="numPages" name="numPages" required placeholder="Enter number of pages">
+                <div class="input-hint">Hint: Enter the total number of pages in the printed book.</div>
+            </div>
+
+            <div class="expandable-input">
+                <label for="numCopies">Number of Printed Copies:</label>
+                <input type="number" id="numCopies" name="numCopies" required placeholder="Enter number of copies">
+                <div class="input-hint">Hint: Enter the total number of printed copies.</div>
+            </div>
+        
+            <input type="submit" value="Calculate">
+        </form>
+
+
+        
+
+        <div id="result"></div>
+        <!-- Coach mark text -->
+        <div class="coachmark-text">Enter the number of pages and copies, then click "Calculate" to find out how many trees you've saved!</div>
+    </section>
+</div>
+
+<footer>
+    <p>Explore our selection of e-books and start your digital reading journey today!</p>
+</footer>
+
+<script>
+
+
+function setNaiveUser() {
+if (typeof(Storage) !== "undefined") {
+localStorage.usercount = 0;
+}
+}
+
+function setNoviceUser() {
+if (typeof(Storage) !== "undefined") {
+localStorage.usercount = 2;
+}
+}
+
+function setTypicalUser() {
+if (typeof(Storage) !== "undefined") {
+localStorage.usercount = 7;
+}
+}
+
+function setAdvancedUser() {
+if (typeof(Storage) !== "undefined") {
+localStorage.usercount = 12;
+}
+}
+
+function incrementUser() {
+if (typeof(Storage) !== "undefined") {
+localStorage.usercount++;
+}
+}
+
+function showUser() {
+    if (typeof(Storage) !== "undefined") {
+        usercount = localStorage.usercount;
+        localStorage.usercount++;
+        document.getElementById("usercount").innerHTML = usercount;
+        
+        // Determine user type
+        var userType = "";
+        if (usercount == 0) {
+            userType = "Naive";
+        } else if (usercount < 5) {
+            userType = "Novice";
+        } else if (usercount < 10) {
+            userType = "Typical";
+        } else {
+            userType = "Advanced";
+        }
+        document.getElementById("usertype").innerHTML = userType;
+
+        // Update visibility of hints based on user type
+        var tooltips = document.getElementsByClassName('tooltiptext');
+        for (var i = 0; i < tooltips.length; i++) {
+            var tooltip = tooltips[i];
+            if (userType !== "Naive" && userType !== "Novice") { // Hide hints for Typical and Advanced users
+                tooltip.style.visibility = "hidden";
+            } else {
+                tooltip.style.visibility = "visible";
+            }
+        }
+
+        // Update visibility of secondary information based on user type
+        var secondaryContent = document.getElementById('secondaryContent');
+        if (userType === "Advanced") { // Hide secondary content for Typical users
+            secondaryContent.style.display = 'block'; // Show the secondary content for Advanced users
+        } else {
+            secondaryContent.style.display = 'none'; // Hide the secondary content for Typical users
+        }
+
+        // Update visibility of dropdown items based on user type
+        var dropdownItems = document.querySelectorAll('.dropdown-content a');
+        for (var i = 0; i < dropdownItems.length; i++) {
+            var dropdownItem = dropdownItems[i];
+            if (userType === "Typical" || userType === "Advanced") {
+                dropdownItem.style.display = 'none'; // Hide dropdown items for Typical and Advanced users
+            } else {
+                dropdownItem.style.display = 'block'; // Show dropdown items for Naive and Novice users
+            }
+        }
+
+        // Show the calculator for all user types other than "Naive"
+        var calculatorForm = document.getElementById('treeCalculator');
+        if (userType !== "Naive") {
+            calculatorForm.style.display = 'block';
+        } else {
+            calculatorForm.style.display = 'none';
+        }
+
+        // Hide the settings button for naive, novice, and typical users
+        var settingsButton = document.getElementById('toggleSettings');
+        if (userType === "Naive" || userType === "Novice" || userType === "Typical") {
+            settingsButton.style.display = 'none';
+        } else {
+            settingsButton.style.display = 'block';
+        }
+    } else {
+        document.getElementById("usercount").innerHTML = -1;
+        document.getElementById("usertype").innerHTML =
+        "Sorry, your browser does not support web storage...";
+    }
+}
+
+
+
+// Update the event listeners for hovering over the tooltip containers
+var tooltips = document.getElementsByClassName('tooltip');
+for (var i = 0; i < tooltips.length; i++) {
+    var tooltip = tooltips[i];
+    tooltip.addEventListener('mouseenter', function() {
+        var userType = document.getElementById("usertype").innerHTML;
+        if (userType !== "Naive") {
+            return; // Do not show the tooltip for non-naive users
+        }
+        var tooltipText = this.getElementsByClassName('tooltiptext')[0];
+        tooltipText.style.visibility = "visible";
+    });
+    tooltip.addEventListener('mouseleave', function() {
+        var userType = document.getElementById("usertype").innerHTML;
+        if (userType !== "Naive") {
+            return; // Do not hide the tooltip for non-naive users
+        }
+        var tooltipText = this.getElementsByClassName('tooltiptext')[0];
+        tooltipText.style.visibility = "hidden";
+    });
+}
+
+
+function loadUserCount() {
+showUser();
+}
+
+    // Function to toggle visibility of settings dropdown and reset button
+    document.getElementById('toggleSettings').addEventListener('click', function() {
+        var settingsDropdown = document.getElementById('settingsDropdown');
+        var resetSettings = document.getElementById('resetSettings'); // Get the reset button
+        
+        if (settingsDropdown.style.display === 'none') {
+            settingsDropdown.style.display = 'block'; // Show the dropdown
+            resetSettings.style.display = 'block'; // Show the reset button when settings are pressed
+        } else {
+            settingsDropdown.style.display = 'none'; // Hide the dropdown
+            resetSettings.style.display = 'none'; // Hide the reset button when settings are closed
+        }
+    });
+
+    // Function to reset calculator settings
+    document.getElementById('resetSettings').addEventListener('click', function() {
+        // Reset settings code goes here
+        // For example, reset number of pages and copies to default values
+        document.getElementById('numPages').value = '';
+        document.getElementById('numCopies').value = '';
+    });
+
+
+    // Function to toggle visibility of secondary information
+    document.getElementById('toggleSecondaryInfoButton').addEventListener('click', function() {
+        var secondaryContent = document.getElementById('secondaryContent');
+        if (secondaryContent.style.display === 'none') {
+            secondaryContent.style.display = 'block'; // Show the secondary content
+            this.textContent = 'Hide Secondary Information'; // Change button text
+        } else {
+            secondaryContent.style.display = 'none'; // Hide the secondary content
+            this.textContent = 'Show Secondary Information'; // Change button text
+        }
+    });
+
+    // Function to populate text boxes based on selected option
+    function selectOption(option) {
+        var numPagesInput = document.getElementById('numPages');
+        var numCopiesInput = document.getElementById('numCopies');
+        
+        // Populate text boxes based on selected option
+        switch(option) {
+            case 'Option 1':
+                numPagesInput.value = 100;
+                numCopiesInput.value = 10;
+                break;
+            case 'Option 2':
+                numPagesInput.value = 200;
+                numCopiesInput.value = 20;
+                break;
+            case 'Option 3':
+                numPagesInput.value = 300;
+                numCopiesInput.value = 30;
+                break;
+            // Add more cases for additional options if needed
+        }
+    }
+
+    document.getElementById('toggleCalculator').addEventListener('click', function() {
+        var calculatorForm = document.getElementById('treeCalculator');
+        if (calculatorForm.style.display === 'none') {
+            calculatorForm.style.display = 'block'; // Show the form
+        } else {
+            calculatorForm.style.display = 'none'; // Hide the form
+        }
+    });
+
+    document.getElementById('treeCalculator').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        // Retrieve input values
+        var numPages = parseInt(document.getElementById('numPages').value);
+        var numCopies = parseInt(document.getElementById('numCopies').value);
+
+        // Calculate trees saved
+        var treesSaved = numPages * numCopies / 8333; // Assuming 8333 pages per tree
+        
+        // Display result
+        document.getElementById('result').innerHTML = "<p>Number of Trees Saved: " + treesSaved.toFixed(2) + "</p>";
+    });
+</script>
+    
+</body>
+</html>

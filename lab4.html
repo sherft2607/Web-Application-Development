@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trees Saved Calculator</title>
+    <style>
+        /* Base styles for smaller (mobile) devices */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        form {
+            width: 100%;
+            box-sizing: border-box;
+        }
+        label, input, button {
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        input, button {
+            padding: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+        }
+        button {
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Adjustments for larger screens */
+        @media (min-width: 481px) {
+            body {
+                padding: 0 20px;
+            }
+            h1 {
+                font-size: 24px;
+            }
+            p {
+                font-size: 16px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            form {
+                max-width: 500px; /* Limit form width on larger screens */
+            }
+            input, button {
+                padding: 10px;
+            }
+            h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Trees Saved by Using eBooks</h1>
+    
+    <p>Please enter only numeric values in the fields below.</p>
+
+    <form id="calculator">
+        <label for="pages">Number of Pages in the Book:</label>
+        <input type="text" id="pages" name="pages" placeholder="Enter number of pages" oninput="validateNumericInput(this)" required>
+
+        <label for="copies">Number of Printed Copies Avoided:</label>
+        <input type="text" id="copies" name="copies" placeholder="Enter number of copies" oninput="validateNumericInput(this)" required>
+
+        <button type="button" onclick="calculateTrees()">Calculate Trees Saved</button>
+    </form>
+
+    <p id="result"></p>
+
+    <script>
+        // JavaScript functions here
+    </script>
+</body>
+</html>

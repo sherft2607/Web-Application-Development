@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>eBook vs Traditional Book Calculator</title>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    #calculator {
+      width: 300px;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    input {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+      margin-top: 10px;
+    }
+    p {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="calculator">
+  <p>Calculate the estimated number of trees saved by choosing eBooks over traditional printed books.</p>
+  <label for="inputData">Enter the total number of pages and copies:</label>
+  <input type="text" id="inputData" placeholder="e.g., 300 pages, 5 copies" required>
+  <button onclick="calculateTreesSaved()">Calculate</button>
+  <p id="result"></p>
+  <p id="instructions">Please enter the total number of pages and copies in the format: "number of pages, number of copies".</p>
+</div>
+
+<script>
+  function calculateTreesSaved() {
+    const inputData = document.getElementById('inputData').value;
+
+    const regex = /^(\d+)\s*pages,\s*(\d+)\s*copies$/;
+    const match = inputData.match(regex);
+
+    if (!match) {
+      document.getElementById('result').innerText = 'Invalid input format. Please follow the instructions.';
+      return;
+    }
+
+    const numPages = parseInt(match[1], 10);
+    const numCopies = parseInt(match[2], 10);
+
+    if (isNaN(numPages) || isNaN(numCopies) || numPages <= 0 || numCopies <= 0) {
+      document.getElementById('result').innerText = 'Please enter valid numbers for pages and copies.';
+      return;
+    }
+
+    const treesSaved = numPages * numCopies * 0.002; // Assuming 500 sheets of paper per tree
+
+    document.getElementById('result').innerText = `Using eBooks instead of traditional books would save approximately ${treesSaved.toFixed(2)} trees.`;
+  }
+</script>
+
+</body>
+</html>
